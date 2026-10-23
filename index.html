@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreshMart — Groceries That Sell Themselves | Delivered Daily</title>
+<meta name="description" content="FreshMart is a neighbourhood grocery store online: fresh produce, bakery, dairy, meat and pantry staples with free delivery over $50 and weekly deals.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#1e9e4a; --green-dark:#0f6b31; --green-deep:#0a4520;
+    --mint:#e7f7ec; --mint-2:#d3f0dd; --ink:#14231a; --grey:#5c6f63;
+    --line:#e2ece5; --bg:#fbfefc; --card:#ffffff; --amber:#ffb020; --red:#ee4444;
+    --shadow:0 18px 44px rgba(15,80,40,.12);
+    --disp:'Fredoka',sans-serif; --sans:'Inter',Helvetica,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.55}
+  img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  button{font-family:var(--sans);cursor:pointer}
+  .wrap{width:min(1260px,93%);margin:0 auto}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  .topbar{background:var(--green-deep);color:#cdeed9;text-align:center;font-size:.8rem;font-weight:600;padding:.5rem 1rem}
+  .topbar b{color:#fff}
+  header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;gap:1.6rem;padding:.9rem 0}
+  .logo{font-family:var(--disp);font-size:1.9rem;font-weight:700;color:var(--green-dark);white-space:nowrap}
+  .logo span{color:var(--green)}
+  .search{flex:1;display:flex;background:var(--mint);border-radius:999px;padding:.35rem;max-width:520px}
+  .search input{flex:1;border:none;background:transparent;padding:.5rem 1rem;font-family:var(--sans);font-size:.95rem;outline:none;min-width:0}
+  .search button{background:var(--green);color:#fff;border:none;border-radius:999px;padding:.55rem 1.3rem;font-weight:700;font-size:.85rem}
+  .nav-links{display:flex;gap:1.6rem;font-weight:600;font-size:.9rem}
+  .nav-links a:hover{color:var(--green)}
+  .cart-btn{margin-left:auto;background:var(--green);color:#fff;border:none;border-radius:999px;padding:.7rem 1.4rem;font-weight:700;display:flex;gap:.55rem;align-items:center;transition:background .25s}
+  .cart-btn:hover{background:var(--green-dark)}
+  .cart-count{background:#fff;color:var(--green-dark);border-radius:50%;min-width:22px;height:22px;display:grid;place-items:center;font-size:.75rem;padding:0 4px}
+
+  /* Hero */
+  .hero{padding:3.6rem 0 4.2rem;background:linear-gradient(180deg,var(--mint) 0%,var(--bg) 100%)}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center}
+  .hero-badge{display:inline-block;background:#fff;border:1px solid var(--mint-2);color:var(--green-dark);font-weight:700;font-size:.78rem;padding:.45rem 1rem;border-radius:999px;box-shadow:0 6px 18px rgba(15,80,40,.08)}
+  .hero h1{font-family:var(--disp);font-weight:700;font-size:clamp(2.7rem,6vw,4.6rem);line-height:1.04;margin:1.1rem 0 1rem}
+  .hero h1 span{color:var(--green)}
+  .hero p{color:var(--grey);font-size:1.06rem;max-width:30rem}
+  .hero-ctas{display:flex;gap:.9rem;margin-top:1.9rem;flex-wrap:wrap}
+  .btn{display:inline-block;padding:.95rem 1.9rem;border-radius:999px;font-weight:700;font-size:.92rem;transition:.25s;border:2px solid var(--green)}
+  .btn-solid{background:var(--green);color:#fff}
+  .btn-solid:hover{background:var(--green-dark);border-color:var(--green-dark)}
+  .btn-ghost{color:var(--green-dark);background:#fff}
+  .btn-ghost:hover{background:var(--mint)}
+  .hero-points{display:flex;gap:1.8rem;margin-top:2.2rem;flex-wrap:wrap}
+  .hero-points div{font-size:.85rem;font-weight:600;color:var(--grey)}
+  .hero-points b{display:block;font-family:var(--disp);font-size:1.3rem;color:var(--ink)}
+  .hero-photo{position:relative}
+  .hero-photo img{width:100%;height:480px;object-fit:cover;border-radius:28px;box-shadow:var(--shadow)}
+  .float-card{position:absolute;background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:.85rem 1.1rem;display:flex;gap:.8rem;align-items:center}
+  .float-card img{width:46px;height:46px;border-radius:10px;object-fit:cover}
+  .float-card b{font-size:.9rem;display:block;line-height:1.2}
+  .float-card span{font-size:.78rem;color:var(--grey)}
+  .fc-1{top:22px;left:-20px}
+  .fc-2{bottom:24px;right:-14px}
+  .fc-2 .tick{background:var(--mint);color:var(--green-dark);font-weight:800;border-radius:50%;width:38px;height:38px;display:grid;place-items:center;flex:none}
+
+  /* Categories */
+  section{padding:4.6rem 0}
+  .sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-bottom:2.2rem;flex-wrap:wrap}
+  .sec-head h2{font-family:var(--disp);font-weight:700;font-size:clamp(1.9rem,4vw,2.7rem);line-height:1.1}
+  .sec-head h2 span{color:var(--green)}
+  .sec-head p{color:var(--grey);max-width:27rem}
+  .cat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1.1rem}
+  .cat-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:1.1rem;text-align:center;transition:.3s;width:100%}
+  .cat-card:hover{transform:translateY(-5px);box-shadow:var(--shadow);border-color:var(--mint-2)}
+  .cat-card.active{border-color:var(--green);background:var(--mint)}
+  .cat-card img{width:84px;height:84px;border-radius:50%;object-fit:cover;margin:0 auto .7rem}
+  .cat-card b{font-family:var(--disp);font-size:1.02rem;display:block}
+  .cat-card span{font-size:.78rem;color:var(--grey)}
+
+  /* Shop */
+  .shop-bar{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-bottom:2rem}
+  .pill{background:#fff;border:1.5px solid var(--line);padding:.55rem 1.25rem;border-radius:999px;font-weight:600;font-size:.86rem;color:var(--grey);transition:.25s}
+  .pill:hover{border-color:var(--green);color:var(--green-dark)}
+  .pill.active{background:var(--green);border-color:var(--green);color:#fff}
+  .result-note{margin-left:auto;font-size:.85rem;color:var(--grey)}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.3rem}
+  .p-card{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;transition:.3s}
+  .p-card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+  .p-img{position:relative}
+  .p-img img{width:100%;height:180px;object-fit:cover}
+  .deal-badge{position:absolute;top:10px;left:10px;background:var(--red);color:#fff;font-weight:800;font-size:.74rem;padding:.3rem .65rem;border-radius:999px}
+  .cat-badge{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.92);color:var(--green-dark);font-weight:700;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;padding:.3rem .65rem;border-radius:999px}
+  .p-body{padding:1.05rem 1.15rem 1.25rem;display:flex;flex-direction:column;gap:.25rem;flex:1}
+  .p-body h3{font-family:var(--disp);font-weight:600;font-size:1.12rem;line-height:1.2}
+  .p-unit{font-size:.82rem;color:var(--grey)}
+  .p-foot{margin-top:auto;padding-top:.8rem;display:flex;align-items:center;justify-content:space-between;gap:.6rem}
+  .p-price{font-weight:800;font-size:1.12rem}
+  .p-price s{color:var(--grey);font-weight:500;font-size:.88rem;margin-right:.35rem}
+  .p-per{font-size:.76rem;color:var(--grey);display:block;font-weight:500}
+  .add-btn{background:var(--green);color:#fff;border:none;border-radius:999px;padding:.6rem 1.15rem;font-weight:700;font-size:.85rem;transition:.25s}
+  .add-btn:hover{background:var(--green-dark)}
+  .no-results{grid-column:1/-1;text-align:center;color:var(--grey);padding:3rem 1rem;background:#fff;border:1px dashed var(--mint-2);border-radius:20px}
+
+  /* Deals */
+  .deals{background:var(--green-deep);border-radius:32px;padding:3rem;color:#fff}
+  .deals-head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;flex-wrap:wrap;margin-bottom:2rem}
+  .deals h2{font-family:var(--disp);font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.1}
+  .deals h2 span{color:var(--amber)}
+  .countdown{text-align:right}
+  .countdown .lbl{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#9fd8b4;font-weight:700}
+  .countdown .time{font-family:var(--disp);font-size:2rem;font-weight:700;color:#fff}
+  .deal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+  .deal-card{background:#fff;color:var(--ink);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+  .deal-card img{width:100%;height:170px;object-fit:cover}
+  .deal-body{padding:1.1rem 1.2rem 1.3rem;display:flex;flex-direction:column;gap:.3rem;flex:1}
+  .deal-body h3{font-family:var(--disp);font-size:1.15rem}
+  .deal-body p{font-size:.86rem;color:var(--grey);flex:1}
+  .deal-foot{display:flex;justify-content:space-between;align-items:center;margin-top:.7rem}
+  .ends-badge{background:#fdecec;color:var(--red);font-weight:800;font-size:.72rem;padding:.35rem .7rem;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+
+  /* CTA + footer */
+  .cta{background:var(--mint);border-radius:32px;padding:3rem;display:grid;grid-template-columns:1.2fr .8fr;gap:2.5rem;align-items:center}
+  .cta h2{font-family:var(--disp);font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.12}
+  .cta h2 span{color:var(--green)}
+  .cta p{color:var(--grey);margin-top:.6rem;max-width:26rem}
+  .cta img{width:100%;height:260px;object-fit:cover;border-radius:22px}
+  footer{background:var(--green-deep);color:#bfe6cd;padding:4.2rem 0 0;margin-top:4.6rem}
+  .foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:2.4rem;padding-bottom:3rem}
+  footer .logo{color:#fff} footer .logo span{color:var(--amber)}
+  footer h4{color:#fff;font-family:var(--disp);margin-bottom:1rem;font-size:1.05rem}
+  footer ul{list-style:none} footer li{margin-bottom:.55rem;font-size:.9rem}
+  footer a:hover{color:#fff}
+  .foot-bar{border-top:1px solid rgba(255,255,255,.16);padding:1.3rem 0;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.8rem;color:#8fbf9f}
+
+  /* Cart drawer */
+  .overlay{position:fixed;inset:0;background:rgba(10,40,22,.55);opacity:0;pointer-events:none;transition:.3s;z-index:80}
+  .overlay.open{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100dvh;width:min(440px,95vw);background:#fff;z-index:90;transform:translateX(105%);transition:transform .45s cubic-bezier(.22,.8,.3,1);display:flex;flex-direction:column;box-shadow:-18px 0 50px rgba(0,0,0,.2)}
+  .drawer.open{transform:none}
+  .drawer-head{display:flex;justify-content:space-between;align-items:center;padding:1.3rem 1.5rem;border-bottom:1px solid var(--line)}
+  .drawer-head h3{font-family:var(--disp);font-size:1.5rem}
+  .icon-btn{background:none;border:none;font-size:1.55rem;color:var(--grey);line-height:1}
+  .ship-progress{padding:1.1rem 1.5rem 0}
+  .ship-progress p{font-size:.85rem;font-weight:600;margin-bottom:.55rem}
+  .ship-progress p b{color:var(--green-dark)}
+  .bar{height:10px;background:var(--mint);border-radius:999px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--green-dark));border-radius:999px;transition:width .5s ease}
+  .drawer-items{flex:1;overflow-y:auto;padding:1.2rem 1.5rem;display:flex;flex-direction:column;gap:.9rem}
+  .empty-cart{text-align:center;color:var(--grey);padding:2.6rem 1rem}
+  .c-item{display:grid;grid-template-columns:56px 1fr auto;gap:.85rem;align-items:center;border:1px solid var(--line);border-radius:14px;padding:.55rem}
+  .c-item img{width:56px;height:56px;object-fit:cover;border-radius:10px}
+  .c-item h4{font-family:var(--disp);font-weight:600;font-size:.95rem;line-height:1.2}
+  .c-item .c-sub{font-size:.74rem;color:var(--grey)}
+  .qty{display:inline-flex;gap:.5rem;align-items:center;margin-top:.25rem}
+  .qty button{width:24px;height:24px;border:1.5px solid var(--line);background:var(--mint);border-radius:7px;font-weight:800;line-height:1;color:var(--green-dark)}
+  .c-right{text-align:right}
+  .c-right b{font-size:1rem}
+  .c-remove{display:block;background:none;border:none;color:var(--grey);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:underline;margin-top:.3rem}
+  .drawer-foot{border-top:1px solid var(--line);padding:1.2rem 1.5rem 1.5rem}
+  .sum-row{display:flex;justify-content:space-between;font-size:.92rem;color:var(--grey);margin-bottom:.4rem}
+  .sum-row.total{font-family:var(--disp);font-size:1.3rem;color:var(--ink);margin:.6rem 0 1rem}
+  .sum-row .free{color:var(--green);font-weight:800}
+  .checkout-btn{width:100%;background:var(--green);color:#fff;border:none;border-radius:999px;padding:1rem;font-weight:800;font-size:.92rem;transition:.25s}
+  .checkout-btn:hover{background:var(--green-dark)}
+  .order-done{display:none;text-align:center;padding:1rem 0 .4rem}
+  .order-done.show{display:block}
+  .order-done b{font-family:var(--disp);font-size:1.35rem;display:block;margin-bottom:.3rem;color:var(--green-dark)}
+  .order-done p{font-size:.88rem;color:var(--grey)}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,90px);background:var(--green-deep);color:#fff;padding:.9rem 1.7rem;border-radius:999px;font-weight:600;font-size:.9rem;z-index:120;transition:transform .4s cubic-bezier(.22,.8,.3,1);box-shadow:var(--shadow);white-space:nowrap}
+  .toast.show{transform:translate(-50%,0)}
+  .toast b{color:var(--amber)}
+
+  @media(max-width:1080px){.grid{grid-template-columns:repeat(3,1fr)}.cat-row{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:860px){
+    .nav-links{display:none}.search{display:none}
+    .hero-grid,.cta{grid-template-columns:1fr}
+    .hero-photo img{height:360px}.fc-1{left:8px}.fc-2{right:8px}
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .deal-grid,.foot-grid{grid-template-columns:1fr}
+    .countdown{text-align:left}
+    .deals,.cta{padding:2rem 1.4rem}
+  }
+  @media(max-width:520px){.grid{grid-template-columns:1fr}.cat-row{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<div class="topbar">Free delivery on orders over <b>$50</b> &nbsp;·&nbsp; Order by 8pm for next-morning delivery</div>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#">Fresh<span>Mart</span></a>
+    <form class="search" id="searchForm">
+      <input type="search" id="searchInput" placeholder="Search avocados, sourdough, salmon..." aria-label="Search products">
+      <button type="submit">Search</button>
+    </form>
+    <nav class="nav-links"><a href="#categories">Categories</a><a href="#shop">Shop</a><a href="#deals">Weekly Deals</a></nav>
+    <button class="cart-btn" id="openCart">Cart <span class="cart-count" id="cartCount">0</span></button>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <span class="hero-badge">Rated 4.9 by 3,200 neighbours</span>
+      <h1>Fresh Fruits &amp; Vegetables. <span>Delivered Daily.</span></h1>
+      <p>This is the design that sells more groceries: everything fresh on one screen, honest per-unit pricing, and a cart that tells you exactly how close you are to free delivery.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-solid" href="#shop">Start Shopping</a>
+        <a class="btn btn-ghost" href="#deals">See Weekly Deals</a>
+      </div>
+      <div class="hero-points">
+        <div><b>120+</b>fresh lines daily</div>
+        <div><b>By 9am</b>next-morning slots</div>
+        <div><b>$0</b>delivery over $50</div>
+      </div>
+    </div>
+    <div class="hero-photo reveal in">
+      <img src="images/hero.jpg" alt="FreshMart produce wall">
+      <div class="float-card fc-1"><img src="images/strawberries.jpg" alt="Strawberries"><div><b>Organic Strawberries</b><span>$4.50 · 400g punnet</span></div></div>
+      <div class="float-card fc-2"><span class="tick">✓</span><div><b>Order packed in 14 min</b><span>Chilled, checked, on its way</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Popular <span>Categories</span></h2>
+      <p>Tap a category to filter the shop instantly — no page reloads, no hunting through aisles.</p>
+    </div>
+    <div class="cat-row" id="catRow"></div>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section id="shop" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Shop <span>Fresh</span></h2>
+      <p>Every price shows the unit cost underneath, so comparing is effortless. That honesty is the whole pitch.</p>
+    </div>
+    <div class="shop-bar reveal" id="shopBar">
+      <button class="pill active" data-filter="All">All</button>
+      <button class="pill" data-filter="Produce">Produce</button>
+      <button class="pill" data-filter="Bakery">Bakery</button>
+      <button class="pill" data-filter="Dairy">Dairy &amp; Eggs</button>
+      <button class="pill" data-filter="Meat">Meat &amp; Fish</button>
+      <button class="pill" data-filter="Pantry">Pantry</button>
+      <span class="result-note" id="resultNote"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- DEALS -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="deals reveal" id="deals">
+      <div class="deals-head">
+        <div>
+          <h2>Weekly <span>Deals</span></h2>
+          <p style="color:#bfe6cd;max-width:26rem;margin-top:.4rem">Fresh markdowns every Monday. When the timer runs out, prices go back up — no fake urgency, the countdown is real.</p>
+        </div>
+        <div class="countdown"><span class="lbl">Deals end in</span><div class="time" id="countdown">—</div></div>
+      </div>
+      <div class="deal-grid" id="dealGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>Ready to Fill Your Cart <span>With Freshness?</span></h2>
+        <p>Create your first order in under three minutes. We pack it chilled, check every item by hand, and text you when the driver leaves.</p>
+        <a class="btn btn-solid" href="#shop" style="margin-top:1.4rem">Shop the Fresh Stuff</a>
+      </div>
+      <img src="images/bread.jpg" alt="Fresh baked bread at FreshMart">
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="logo" href="#">Fresh<span>Mart</span></a>
+        <p style="margin-top:.9rem;max-width:19rem;font-size:.92rem">Your neighbourhood grocery, online. Fresh in the morning, honest on price, kind at the door.</p>
+      </div>
+      <div><h4>Shop</h4><ul><li><a href="#categories">Categories</a></li><li><a href="#shop">All Products</a></li><li><a href="#deals">Weekly Deals</a></li></ul></div>
+      <div><h4>Help</h4><ul><li><a href="#footer">Delivery Info</a></li><li><a href="#footer">Returns &amp; Refunds</a></li><li><a href="#footer">Contact Us</a></li></ul></div>
+      <div>
+        <h4>Visit the Store</h4>
+        <ul>
+          <li>248 Market Lane, Greenfield</li>
+          <li>Mon–Sat: 7:00am – 10:00pm</li>
+          <li>Sunday: 8:00am – 8:00pm</li>
+          <li>hello@freshmart.example</li>
+          <li>+1 (555) 013-4472</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bar"><span>© 2026 FreshMart — demo storefront.</span><span>Photos: Unsplash. Replace with your own photography before launch.</span></div>
+  </div>
+</footer>
+
+<!-- CART -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="Shopping cart">
+  <div class="drawer-head"><h3>Your Cart</h3><button class="icon-btn" id="closeCart" aria-label="Close cart">&times;</button></div>
+  <div class="ship-progress">
+    <p id="shipMsg"></p>
+    <div class="bar"><i id="shipBar"></i></div>
+  </div>
+  <div class="drawer-items" id="drawerItems"></div>
+  <div class="drawer-foot">
+    <div id="cartSummary">
+      <div class="sum-row"><span>Subtotal</span><span id="subTotal">$0.00</span></div>
+      <div class="sum-row"><span>Delivery</span><span id="delFee">$3.95</span></div>
+      <div class="sum-row total"><span>Total</span><span id="grandTotal">$0.00</span></div>
+      <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+    </div>
+    <div class="order-done" id="orderDone">
+      <b>Order placed — thank you!</b>
+      <p id="orderMsg"></p>
+    </div>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const FREE_AT = 50, DELIVERY_FEE = 3.95;
+const PRODUCTS = [
+  {id:1, name:"Hass Avocado", cat:"Produce", price:1.80, unit:"each", per:"$1.80 / each", img:"images/avocado.jpg"},
+  {id:2, name:"Organic Strawberries", cat:"Produce", price:4.50, unit:"400g punnet", per:"$1.13 / 100g", img:"images/strawberries.jpg"},
+  {id:3, name:"Bananas", cat:"Produce", price:2.20, unit:"1kg bunch", per:"$0.22 / 100g", img:"images/bananas.jpg"},
+  {id:4, name:"Vine Tomatoes", cat:"Produce", price:2.90, old:3.60, unit:"500g pack", per:"$0.58 / 100g", img:"images/tomatoes.jpg", deal:"A weeknight hero — sweet, firm, and born for salads and sauces."},
+  {id:5, name:"Broccoli Head", cat:"Produce", price:1.60, unit:"each", per:"$1.60 / each", img:"images/broccoli.jpg"},
+  {id:6, name:"Rainbow Carrots", cat:"Produce", price:2.40, unit:"750g bag", per:"$0.32 / 100g", img:"images/carrots.jpg"},
+  {id:7, name:"Gala Apples", cat:"Produce", price:3.80, unit:"1kg bag", per:"$0.38 / 100g", img:"images/apples.jpg"},
+  {id:8, name:"Watermelon", cat:"Produce", price:5.90, unit:"each (approx. 4kg)", per:"$1.48 / kg", img:"images/watermelon.jpg"},
+  {id:9, name:"Rustic Sourdough", cat:"Bakery", price:4.80, unit:"800g loaf", per:"$0.60 / 100g", img:"images/bread.jpg"},
+  {id:10, name:"Butter Croissants", cat:"Bakery", price:4.20, old:5.20, unit:"pack of 4", per:"$1.05 / croissant", img:"images/croissants.jpg", deal:"Baked at 6am, gone by 10. Flaky, golden, dangerously buttery."},
+  {id:11, name:"Whole Milk", cat:"Dairy", price:3.40, unit:"2L bottle", per:"$0.17 / 100ml", img:"images/milk.jpg"},
+  {id:12, name:"Aged Farm Cheese", cat:"Dairy", price:6.90, unit:"300g wedge", per:"$2.30 / 100g", img:"images/cheese.jpg"},
+  {id:13, name:"Free-Range Eggs", cat:"Dairy", price:4.60, unit:"12 pack", per:"$0.38 / egg", img:"images/eggs.jpg"},
+  {id:14, name:"Ribeye Steak", cat:"Meat", price:12.90, old:15.90, unit:"400g cut", per:"$3.23 / 100g", img:"images/steak.jpg", deal:"Butcher's pick — marbled, dry-aged 21 days, cut thick for the grill."},
+  {id:15, name:"Salmon Fillet", cat:"Meat", price:9.80, unit:"300g fillet", per:"$3.27 / 100g", img:"images/salmon.jpg"},
+  {id:16, name:"Extra-Virgin Olive Oil", cat:"Pantry", price:7.50, unit:"500ml bottle", per:"$1.50 / 100ml", img:"images/olive-oil.jpg"}
+];
+const CATEGORIES = [
+  {name:"Produce", img:"images/avocado.jpg", note:"8 fresh lines"},
+  {name:"Bakery", img:"images/croissants.jpg", note:"Baked at dawn"},
+  {name:"Dairy", img:"images/milk.jpg", note:"Dairy & eggs"},
+  {name:"Meat", img:"images/salmon.jpg", note:"Meat & fish"},
+  {name:"Pantry", img:"images/olive-oil.jpg", note:"Store-cupboard gold"}
+];
+const money = n => '$' + n.toFixed(2);
+let activeFilter = 'All', searchTerm = '';
+
+/* Categories */
+const catRow = document.getElementById('catRow');
+CATEGORIES.forEach(c => {
+  const b = document.createElement('button');
+  b.className = 'cat-card reveal'; b.dataset.cat = c.name;
+  b.innerHTML = '<img src="'+c.img+'" alt="'+c.name+'"><b>'+c.name+'</b><span>'+c.note+'</span>';
+  b.addEventListener('click', () => setFilter(c.name, true));
+  catRow.appendChild(b);
+});
+
+/* Product grid */
+const grid = document.getElementById('grid');
+function renderGrid(){
+  const list = PRODUCTS.filter(p =>
+    (activeFilter === 'All' || p.cat === activeFilter) &&
+    p.name.toLowerCase().includes(searchTerm));
+  document.getElementById('resultNote').textContent = 'Showing ' + list.length + ' of ' + PRODUCTS.length + ' products';
+  if(!list.length){
+    grid.innerHTML = '<div class="no-results">Nothing matched that search. Try a shorter word — or browse a category above.</div>';
+    return;
+  }
+  grid.innerHTML = '';
+  list.forEach(p => {
+    const off = p.old ? Math.round((1 - p.price/p.old) * 100) : 0;
+    const card = document.createElement('article');
+    card.className = 'p-card';
+    card.innerHTML =
+      '<div class="p-img"><img src="'+p.img+'" alt="'+p.name+'" loading="lazy">' +
+      (off ? '<span class="deal-badge">−' + off + '%</span>' : '') +
+      '<span class="cat-badge">' + p.cat + '</span></div>' +
+      '<div class="p-body"><h3>' + p.name + '</h3><span class="p-unit">' + p.unit + '</span>' +
+      '<div class="p-foot"><div><span class="p-price">' + (p.old ? '<s>' + money(p.old) + '</s>' : '') + money(p.price) + '</span>' +
+      '<span class="p-per">' + p.per + '</span></div>' +
+      '<button class="add-btn" data-add="' + p.id + '">Add</button></div></div>';
+    grid.appendChild(card);
+  });
+}
+function setFilter(f, scroll){
+  activeFilter = f;
+  document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p.dataset.filter === f));
+  document.querySelectorAll('.cat-card').forEach(c => c.classList.toggle('active', c.dataset.cat === f));
+  renderGrid();
+  if(scroll) document.getElementById('shop').scrollIntoView({behavior:'smooth'});
+}
+document.getElementById('shopBar').addEventListener('click', e => {
+  const pill = e.target.closest('.pill'); if(pill) setFilter(pill.dataset.filter, false);
+});
+document.getElementById('searchForm').addEventListener('submit', e => {
+  e.preventDefault();
+  searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+  renderGrid();
+  document.getElementById('shop').scrollIntoView({behavior:'smooth'});
+});
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchTerm = e.target.value.trim().toLowerCase();
+  renderGrid();
+});
+renderGrid();
+
+/* Deals + countdown */
+const dealGrid = document.getElementById('dealGrid');
+PRODUCTS.filter(p => p.old).forEach(p => {
+  const off = Math.round((1 - p.price/p.old) * 100);
+  const el = document.createElement('article');
+  el.className = 'deal-card';
+  el.innerHTML = '<img src="'+p.img+'" alt="'+p.name+'" loading="lazy"><div class="deal-body">' +
+    '<h3>' + p.name + '</h3><p>' + p.deal + '</p>' +
+    '<div class="deal-foot"><span class="p-price"><s>' + money(p.old) + '</s>' + money(p.price) + '</span>' +
+    '<span class="ends-badge">Save ' + off + '%</span></div>' +
+    '<button class="add-btn" data-add="' + p.id + '" style="margin-top:.8rem">Add to Cart</button></div>';
+  dealGrid.appendChild(el);
+});
+function dealDeadline(){
+  const now = new Date(); const d = new Date(now);
+  d.setDate(d.getDate() + ((7 - d.getDay()) % 7)); // next Sunday
+  d.setHours(23,59,59,999);
+  if(d <= now) d.setDate(d.getDate() + 7);
+  return d;
+}
+const deadline = dealDeadline();
+function tickCountdown(){
+  let diff = Math.max(0, deadline - new Date());
+  const days = Math.floor(diff / 864e5), hrs = Math.floor(diff / 36e5) % 24,
+        min = Math.floor(diff / 6e4) % 60, sec = Math.floor(diff / 1e3) % 60;
+  document.getElementById('countdown').textContent =
+    days + 'd ' + String(hrs).padStart(2,'0') + 'h ' + String(min).padStart(2,'0') + 'm ' + String(sec).padStart(2,'0') + 's';
+}
+tickCountdown(); setInterval(tickCountdown, 1000);
+
+/* Cart */
+let cart = [];
+const drawer = document.getElementById('drawer'), overlay = document.getElementById('overlay');
+function openCart(){ drawer.classList.add('open'); overlay.classList.add('open'); }
+function closeCart(){ drawer.classList.remove('open'); overlay.classList.remove('open'); }
+document.getElementById('openCart').addEventListener('click', openCart);
+document.getElementById('closeCart').addEventListener('click', closeCart);
+overlay.addEventListener('click', closeCart);
+
+function subtotal(){ return cart.reduce((s,i) => s + i.price*i.qty, 0); }
+function addToCart(id){
+  const found = cart.find(i => i.id === id);
+  if(found) found.qty++; else cart.push({id, qty:1});
+  renderCart();
+  const p = PRODUCTS.find(x => x.id === id);
+  toast('<b>' + p.name + '</b> added — ' + money(subtotal()) + ' in cart');
+}
+function renderCart(){
+  const box = document.getElementById('drawerItems');
+  document.getElementById('cartCount').textContent = cart.reduce((s,i) => s + i.qty, 0);
+  if(!cart.length){
+    box.innerHTML = '<div class="empty-cart">Your cart is empty.<br>Fresh things await in the shop.</div>';
+  } else {
+    box.innerHTML = '';
+    cart.forEach(item => {
+      const p = PRODUCTS.find(x => x.id === item.id);
+      const row = document.createElement('div');
+      row.className = 'c-item';
+      row.innerHTML = '<img src="'+p.img+'" alt="">' +
+        '<div><h4>' + p.name + '</h4><span class="c-sub">' + p.unit + ' · ' + money(p.price) + '</span>' +
+        '<div class="qty"><button data-dec="' + p.id + '">−</button><span>' + item.qty + '</span><button data-inc="' + p.id + '">+</button></div></div>' +
+        '<div class="c-right"><b>' + money(p.price*item.qty) + '</b><button class="c-remove" data-rem="' + p.id + '">Remove</button></div>';
+      box.appendChild(row);
+    });
+  }
+  const sub = subtotal();
+  const pct = Math.min(100, sub / FREE_AT * 100);
+  document.getElementById('shipBar').style.width = pct + '%';
+  document.getElementById('shipMsg').innerHTML = sub >= FREE_AT
+    ? '<b>Free delivery unlocked</b> — nicely done.'
+    : 'Add <b>' + money(FREE_AT - sub) + '</b> more for <b>FREE delivery</b>';
+  const fee = sub === 0 ? 0 : (sub >= FREE_AT ? 0 : DELIVERY_FEE);
+  document.getElementById('subTotal').textContent = money(sub);
+  document.getElementById('delFee').innerHTML = sub >= FREE_AT ? '<span class="free">FREE</span>' : money(fee);
+  document.getElementById('grandTotal').textContent = money(sub + fee);
+  document.getElementById('cartSummary').style.display = cart.length ? 'block' : 'none';
+  document.getElementById('orderDone').classList.remove('show');
+}
+document.getElementById('drawerItems').addEventListener('click', e => {
+  const inc = e.target.closest('[data-inc]'), dec = e.target.closest('[data-dec]'), rem = e.target.closest('[data-rem]');
+  if(inc) cart.find(i => i.id === +inc.dataset.inc).qty++;
+  if(dec){ const it = cart.find(i => i.id === +dec.dataset.dec); it.qty--; if(it.qty < 1) cart = cart.filter(i => i.id !== it.id); }
+  if(rem) cart = cart.filter(i => i.id !== +rem.dataset.rem);
+  if(inc || dec || rem) renderCart();
+});
+document.addEventListener('click', e => {
+  const add = e.target.closest('[data-add]');
+  if(add) addToCart(+add.dataset.add);
+});
+document.getElementById('checkoutBtn').addEventListener('click', () => {
+  if(!cart.length) return;
+  const total = document.getElementById('grandTotal').textContent;
+  const no = 'FM-' + Math.floor(1000 + Math.random()*9000);
+  document.getElementById('orderMsg').textContent =
+    'Order ' + no + ' (' + total + ') is being packed now. Pick a delivery slot at the door — first slot tomorrow, 7–9am.';
+  document.getElementById('cartSummary').style.display = 'none';
+  document.getElementById('orderDone').classList.add('show');
+  cart = []; document.getElementById('cartCount').textContent = 0;
+  document.getElementById('drawerItems').innerHTML = '<div class="empty-cart">Cart cleared — see you at the door.</div>';
+  document.getElementById('shipBar').style.width = '0%';
+  document.getElementById('shipMsg').innerHTML = 'Add <b>' + money(FREE_AT) + '</b> for <b>FREE delivery</b>';
+});
+renderCart();
+
+let toastTimer;
+function toast(html){
+  const t = document.getElementById('toast');
+  t.innerHTML = html; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+const io = new IntersectionObserver(es => es.forEach(en => { if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } }), {threshold:.1});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeCart(); });
+</script>
+</body>
+</html>
